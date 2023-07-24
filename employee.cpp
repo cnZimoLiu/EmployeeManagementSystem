@@ -16,7 +16,7 @@ employee::~employee()
 
 string employee::getDepartment()
 {
-    return "employee";
+    return string("employee");
 }
 
 void  employee::showDepartment() 
@@ -28,5 +28,5 @@ void employee::showInfo()
 {
     cout<<"ID:"<<w_id<<endl;
     cout<<"name:"<<w_name<<endl;
-    cout<<"depId:"<<w_depId<<endl;
+    cout<<"depId:"<<getDepartment()<<endl;
 }
