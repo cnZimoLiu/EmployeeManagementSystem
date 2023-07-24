@@ -1,5 +1,6 @@
 #include <iostream>
 #include "EmployeeManager.h"
+#include "worker.h"
 using namespace std;
 
 void EmployeeManager::showMenu()
