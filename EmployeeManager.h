@@ -9,6 +9,7 @@ private:
     /* data */
 public:
     void showMenu();
+    void exitSystem();
     EmployeeManager(/* args */);
     ~EmployeeManager();
 };
