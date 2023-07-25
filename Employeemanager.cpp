@@ -221,6 +221,23 @@ void EmployeeManager::addWorkerFromFile()
     }
     file.close();
 }
+/**
+ * ************************************************************************
+ * @brief 显示所有员工信息
+ * ************************************************************************
+ */
+void EmployeeManager::showAll()
+{
+    if(this->fileIsEmpty)
+    {
+        cout<<"no worker"<<endl;
+        return;
+    }
+    for (int i = 0; i < this->num  ; i++)
+    {
+        this->workerArray[i]->showInfo();
+    }
+}
 
 int main()
 {
@@ -242,7 +259,7 @@ int main()
             em.addEmp();
             break;
         case 2: // 显示职工信息
-            /* code */
+            em.showAll();
             break;
         case 3: // 删除
             /* code */

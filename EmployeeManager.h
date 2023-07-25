@@ -22,5 +22,6 @@ public:
     void save();
     int getNumFromFile();
     void addWorkerFromFile();
+    void showAll();
 };
 
