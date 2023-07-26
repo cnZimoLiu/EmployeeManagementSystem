@@ -26,6 +26,7 @@ public:
     int isExistById(int id);
     void delWorker(int id);
     void change(int id);
+    void swap(int a,int b);
     void sortByID();
 };
 

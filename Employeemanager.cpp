@@ -67,7 +67,7 @@ void EmployeeManager::showMenu()
     cout << "************3.删除*****************" << endl;
     cout << "************4.修改*****************" << endl;
     cout << "************5.查找*****************" << endl;
-    cout << "************6.按照编号排序*********" << endl;
+    cout << "************6.按照id排序*********" << endl;
     cout << "************7.清空所有文档*********" << endl;
     cout << "***********************************" << endl;
     cout << endl;
@@ -343,7 +343,35 @@ EmployeeManager::change(int id)
     this->save();
 }
 
+void
+EmployeeManager::swap(int a,int b)
+{
+    worker* temp;
+    temp=this->workerArray[a];
+    this->workerArray[a]=this->workerArray[b];
+    this->workerArray[b]=temp;
 
+}
+
+void
+EmployeeManager::sortByID()
+{
+    for (int i = 0; i < this->num-1; i++)
+    {
+        int minIndex=i;
+        for (int j = i+1; j < this->num; j++)
+        {
+            if (this->workerArray[minIndex]->w_id>this->workerArray[j]->w_id)
+            {
+                minIndex=j;
+            }
+            
+        }
+        this->swap(i,minIndex);
+        
+    }
+    
+}
 /**
  * ************************************************************************
  * @brief 
@@ -388,7 +416,10 @@ int main()
             /* code */
             break;
         case 6: // 按照编号排序
-            /* code */
+            em.sortByID();
+            em.save();
+            cout<<"sort success:"<<endl;
+            em.showAll();
             break;
         case 7: // 清空文件
             /* code */
