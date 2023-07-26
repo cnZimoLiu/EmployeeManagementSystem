@@ -38,7 +38,6 @@ EmployeeManager::EmployeeManager()
     this->num = this->getNumFromFile();
     this->workerArray = new worker *[num]; // 开辟堆区内存要提前知道有多少个数据
     this->addWorkerFromFile();
-    cout << this->num << "worker read from file" << endl;
 }
 /**
  * ************************************************************************
@@ -91,7 +90,7 @@ void EmployeeManager::exitSystem()
  */
 void EmployeeManager::addEmp()
 {
-    cout << "enter the number u want to add" << endl;
+    cout << "enter the number you want to add" << endl;
     int addNum;
     cin >> addNum;
     if (addNum <= 0)
@@ -155,7 +154,7 @@ void EmployeeManager::addEmp()
 void EmployeeManager::save()
 {
     fstream file;
-    file.open(FILENAME);
+    file.open(FILENAME,ios::out);
     if (!file.is_open())
     {
         cout << "error:file not opened" << endl;
@@ -167,7 +166,7 @@ void EmployeeManager::save()
              << this->workerArray[i]->w_depId << endl;
     }
     file.close();
-    cout << this->num << "个数据已保存至文件" << endl;
+    cout <<"保存成功："<< this->num << " 个数据已保存至文件" << endl;
 }
 /**
  * ************************************************************************
@@ -184,7 +183,7 @@ int EmployeeManager::getNumFromFile()
     {
         lineCount++;
     }
-    cout << "there are" << lineCount << "lines in file" << endl;
+    cout << "there are " << lineCount << " lines in file" << endl;
     file.close();
     return lineCount;
 }
@@ -238,7 +237,119 @@ void EmployeeManager::showAll()
         this->workerArray[i]->showInfo();
     }
 }
+/**
+ * ************************************************************************
+ * @brief 根据id查找worker，返回该worker的索引，否则返回-1
+ * @param[in] id  要查找worker的id
+ * @return int 
+ * ************************************************************************
+ */
+int
+EmployeeManager::isExistById(int id)
+{
+    int returnValue=-1;
+    for (int i = 0; i < this->num; i++)
+    {
+        if (this->workerArray[i]->w_id==id)
+        {
+            returnValue=i;
+            break;
+        }
+        
+    }
+    return returnValue;
+}
+/**
+ * ************************************************************************
+ * @brief 通过id删除worker
+ * @param[in] id  Comment
+ * ************************************************************************
+ */
+void
+EmployeeManager::delWorker(int id)
+{
+    if (this->fileIsEmpty==true)
+    {
+        cout<<"nothing to delete";
+        return;
+    }
+    int index=this->isExistById(id);
+    if (index==-1)
+    {
+        cout<<"no such id to delete";
+        return;
+    }
+    delete this->workerArray[index];//释放内存
+    for (int i = index; i < this->num-1 ; i++)
+    {
+        this->workerArray[i]=this->workerArray[i+1];//向前
+    }
+    this->workerArray[num]=nullptr;
+    this->num--;
+    this->save();
+    cout<<"delete success"<<endl;
+    
 
+}
+/**
+ * ************************************************************************
+ * @brief 根据ID改变员工并保存到文件中
+ * @param[in] id  要改变的workerID
+ * ************************************************************************
+ */
+void
+EmployeeManager::change(int id)
+{
+    if (this->fileIsEmpty==true)
+    {
+        cout<<"nothing to change";
+        return;
+    }
+    int index=this->isExistById(id);
+    if (index==-1)
+    {
+        cout<<"no such id to change";
+        return;
+    }
+    int newId;
+    string newName;
+    int newDid;
+    cout<<"new id"<<endl;
+    cin>>newId;
+    cout<<"new name"<<endl;
+    cin>>newName;
+    cout<<"new departmentId"<<endl;
+    cin>>newDid;
+    switch (newDid)
+    {
+    case 0:
+        delete this->workerArray[index];
+        this->workerArray[index]=new employee(newId,newName,newDid);
+        break;
+    case 1:
+        delete this->workerArray[index];
+        this->workerArray[index]=new manager(newId,newName,newDid);
+        break;
+    case 2:
+        delete this->workerArray[index];
+        this->workerArray[index]=new boss(newId,newName,newDid);
+        break;    
+    default:
+        cout<<"error:wrong departmentId"<<endl;
+        break;
+    }
+    cout<<"change complete:"<<endl;
+    this->workerArray[index]->showInfo();
+    this->save();
+}
+
+
+/**
+ * ************************************************************************
+ * @brief 
+ * @return int 
+ * ************************************************************************
+ */
 int main()
 {
 
@@ -262,10 +373,16 @@ int main()
             em.showAll();
             break;
         case 3: // 删除
-            /* code */
+            cout<<"enter id"<<endl;
+            int id;
+            cin>>id;
+            em.delWorker(id);
             break;
         case 4: // 修改
-            /* code */
+            cout<<"enter id"<<endl;
+            int changeid;
+            cin>>changeid;
+            em.change(changeid);
             break;
         case 5: // 查找
             /* code */
@@ -273,7 +390,7 @@ int main()
         case 6: // 按照编号排序
             /* code */
             break;
-        case 7: // 按照编号排序
+        case 7: // 清空文件
             /* code */
             break;
         default:

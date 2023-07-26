@@ -23,5 +23,9 @@ public:
     int getNumFromFile();
     void addWorkerFromFile();
     void showAll();
+    int isExistById(int id);
+    void delWorker(int id);
+    void change(int id);
+    void sortByID();
 };
 
