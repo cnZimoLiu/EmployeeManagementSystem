@@ -2,7 +2,7 @@
 #include <iostream>
 #include "worker.h"
 #include <fstream>
-#define FILENAME "emsFile.txt"
+#define FILENAME "D:\\Code\\CPP\\EmployeeManagementSystem\\emsFile.txt"
 using namespace std;
 
 class EmployeeManager
@@ -28,5 +28,6 @@ public:
     void change(int id);
     void swap(int a,int b);
     void sortByID();
+    void deleteAll();
 };
 

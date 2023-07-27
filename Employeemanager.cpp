@@ -5,6 +5,7 @@
 #include "manager.h"
 #include "boss.h"
 #include <string>
+#include <fstream>
 using namespace std;
 
 /**
@@ -144,7 +145,7 @@ void EmployeeManager::addEmp()
     num = newsize;
     cout << this->num << "个数据已保存至堆区" << endl;
     this->save();
-    this->fileIsEmpty=false;
+    this->fileIsEmpty = false;
 }
 /**
  * ************************************************************************
@@ -154,7 +155,7 @@ void EmployeeManager::addEmp()
 void EmployeeManager::save()
 {
     fstream file;
-    file.open(FILENAME,ios::out);
+    file.open(FILENAME, ios::out);
     if (!file.is_open())
     {
         cout << "error:file not opened" << endl;
@@ -166,7 +167,7 @@ void EmployeeManager::save()
              << this->workerArray[i]->w_depId << endl;
     }
     file.close();
-    cout <<"保存成功："<< this->num << " 个数据已保存至文件" << endl;
+    cout << "保存成功：" << this->num << " 个数据已保存至文件" << endl;
 }
 /**
  * ************************************************************************
@@ -214,7 +215,7 @@ void EmployeeManager::addWorkerFromFile()
             this->workerArray[i] = new boss(id, name, did);
             break;
         default:
-            cout<<"error: "<<i<<" wrong departmentID read"<<endl;
+            cout << "error: " << i << " wrong departmentID read" << endl;
             break;
         }
     }
@@ -227,12 +228,12 @@ void EmployeeManager::addWorkerFromFile()
  */
 void EmployeeManager::showAll()
 {
-    if(this->fileIsEmpty)
+    if (this->fileIsEmpty)
     {
-        cout<<"no worker"<<endl;
+        cout << "no worker" << endl;
         return;
     }
-    for (int i = 0; i < this->num  ; i++)
+    for (int i = 0; i < this->num; i++)
     {
         this->workerArray[i]->showInfo();
     }
@@ -241,21 +242,19 @@ void EmployeeManager::showAll()
  * ************************************************************************
  * @brief 根据id查找worker，返回该worker的索引，否则返回-1
  * @param[in] id  要查找worker的id
- * @return int 
+ * @return int
  * ************************************************************************
  */
-int
-EmployeeManager::isExistById(int id)
+int EmployeeManager::isExistById(int id)
 {
-    int returnValue=-1;
+    int returnValue = -1;
     for (int i = 0; i < this->num; i++)
     {
-        if (this->workerArray[i]->w_id==id)
+        if (this->workerArray[i]->w_id == id)
         {
-            returnValue=i;
+            returnValue = i;
             break;
         }
-        
     }
     return returnValue;
 }
@@ -265,31 +264,28 @@ EmployeeManager::isExistById(int id)
  * @param[in] id  Comment
  * ************************************************************************
  */
-void
-EmployeeManager::delWorker(int id)
+void EmployeeManager::delWorker(int id)
 {
-    if (this->fileIsEmpty==true)
+    if (this->fileIsEmpty == true)
     {
-        cout<<"nothing to delete";
+        cout << "nothing to delete";
         return;
     }
-    int index=this->isExistById(id);
-    if (index==-1)
+    int index = this->isExistById(id);
+    if (index == -1)
     {
-        cout<<"no such id to delete";
+        cout << "no such id to delete";
         return;
     }
-    delete this->workerArray[index];//释放内存
-    for (int i = index; i < this->num-1 ; i++)
+    delete this->workerArray[index]; // 释放内存
+    for (int i = index; i < this->num - 1; i++)
     {
-        this->workerArray[i]=this->workerArray[i+1];//向前
+        this->workerArray[i] = this->workerArray[i + 1]; // 向前
     }
-    this->workerArray[num]=nullptr;
+    this->workerArray[num] = nullptr;
     this->num--;
     this->save();
-    cout<<"delete success"<<endl;
-    
-
+    cout << "delete success" << endl;
 }
 /**
  * ************************************************************************
@@ -297,85 +293,102 @@ EmployeeManager::delWorker(int id)
  * @param[in] id  要改变的workerID
  * ************************************************************************
  */
-void
-EmployeeManager::change(int id)
+void EmployeeManager::change(int id)
 {
-    if (this->fileIsEmpty==true)
+    if (this->fileIsEmpty == true)
     {
-        cout<<"nothing to change";
+        cout << "nothing to change";
         return;
     }
-    int index=this->isExistById(id);
-    if (index==-1)
+    int index = this->isExistById(id);
+    if (index == -1)
     {
-        cout<<"no such id to change";
+        cout << "no such id to change";
         return;
     }
     int newId;
     string newName;
     int newDid;
-    cout<<"new id"<<endl;
-    cin>>newId;
-    cout<<"new name"<<endl;
-    cin>>newName;
-    cout<<"new departmentId"<<endl;
-    cin>>newDid;
+    cout << "new id" << endl;
+    cin >> newId;
+    cout << "new name" << endl;
+    cin >> newName;
+    cout << "new departmentId" << endl;
+    cin >> newDid;
     switch (newDid)
     {
     case 0:
         delete this->workerArray[index];
-        this->workerArray[index]=new employee(newId,newName,newDid);
+        this->workerArray[index] = new employee(newId, newName, newDid);
         break;
     case 1:
         delete this->workerArray[index];
-        this->workerArray[index]=new manager(newId,newName,newDid);
+        this->workerArray[index] = new manager(newId, newName, newDid);
         break;
     case 2:
         delete this->workerArray[index];
-        this->workerArray[index]=new boss(newId,newName,newDid);
-        break;    
+        this->workerArray[index] = new boss(newId, newName, newDid);
+        break;
     default:
-        cout<<"error:wrong departmentId"<<endl;
+        cout << "error:wrong departmentId" << endl;
         break;
     }
-    cout<<"change complete:"<<endl;
+    cout << "change complete:" << endl;
     this->workerArray[index]->showInfo();
     this->save();
 }
 
-void
-EmployeeManager::swap(int a,int b)
+void EmployeeManager::swap(int a, int b)
 {
-    worker* temp;
-    temp=this->workerArray[a];
-    this->workerArray[a]=this->workerArray[b];
-    this->workerArray[b]=temp;
-
+    worker *temp;
+    temp = this->workerArray[a];
+    this->workerArray[a] = this->workerArray[b];
+    this->workerArray[b] = temp;
 }
 
-void
-EmployeeManager::sortByID()
+void EmployeeManager::sortByID()
 {
-    for (int i = 0; i < this->num-1; i++)
+    for (int i = 0; i < this->num - 1; i++)
     {
-        int minIndex=i;
-        for (int j = i+1; j < this->num; j++)
+        int minIndex = i;
+        for (int j = i + 1; j < this->num; j++)
         {
-            if (this->workerArray[minIndex]->w_id>this->workerArray[j]->w_id)
+            if (this->workerArray[minIndex]->w_id > this->workerArray[j]->w_id)
             {
-                minIndex=j;
+                minIndex = j;
             }
-            
         }
-        this->swap(i,minIndex);
-        
+        this->swap(i, minIndex);
     }
-    
+}
+
+void EmployeeManager::deleteAll()
+{
+    for (int i = 0; i < this->num; i++)
+    {
+        delete this->workerArray[i];
+        this->workerArray[i] = nullptr;
+    }
+    this->num = 0;
+    fstream f;
+    f.open(FILENAME, ios::out|ios::trunc);
+    if (f.is_open())
+    {
+        cout << "file.is_open" << endl;
+    }
+    if (f.fail())
+    {
+        cout << "File open failed." << endl;
+        cout << "Error state: " << f.rdstate() << endl;
+    }
+
+    f.close();
+    cout << "delete success" << endl;
 }
 /**
  * ************************************************************************
- * @brief 
- * @return int 
+ * @brief
+ * @return int
  * ************************************************************************
  */
 int main()
@@ -401,15 +414,15 @@ int main()
             em.showAll();
             break;
         case 3: // 删除
-            cout<<"enter id"<<endl;
+            cout << "enter id" << endl;
             int id;
-            cin>>id;
+            cin >> id;
             em.delWorker(id);
             break;
         case 4: // 修改
-            cout<<"enter id"<<endl;
+            cout << "enter id" << endl;
             int changeid;
-            cin>>changeid;
+            cin >> changeid;
             em.change(changeid);
             break;
         case 5: // 查找
@@ -418,11 +431,11 @@ int main()
         case 6: // 按照编号排序
             em.sortByID();
             em.save();
-            cout<<"sort success:"<<endl;
+            cout << "sort success:" << endl;
             em.showAll();
             break;
         case 7: // 清空文件
-            /* code */
+            em.deleteAll();
             break;
         default:
             system("cls");
